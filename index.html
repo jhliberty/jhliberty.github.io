@@ -423,16 +423,16 @@
 
 						<ul class="socials">
 							<li><a href="https://twitter.com/jhliberty"><i class="icon-twitter"></i></a></li>
+							<li><a href="https://github.com/jhliberty"><i class="icon-github"></i></a></li>
 							<li><a href="https://facebook.com/jhliberty"><i class="icon-facebook"></i></a></li>
-							<li><a href="https://dribbble.com/jhliberty"><i class="icon-dribbble"></i></a></li>
-							<li><a href="https://google.com/+JohnHenryLiberty23"><i class="icon-google-plus"></i></a></li>
+							<li><a href="https://linkedin.com/johnhenryliberty"><i class="icon-linkedin"></i></a></li>
 						</ul>
 
 					</div>
 
 					<!--=== Contact Form ===-->
 
-					<form id="contact-form" class="col-sm-7 scrollimation fade-left" action="contact.php" method="post" novalidate>
+					<form id="contact-form" class="col-sm-7 scrollimation fade-left" method="post" novalidate>
 
 						<div class="form-group">
 						  <label class="control-label" for="contact-name">Name</label>
@@ -458,7 +458,7 @@
 							</div>
 						</div><!-- End textarea -->
 
-						<p><button name="submit" type="submit" class="btn btn-theme btn-lg" data-error-message="Error!" data-sending-message="Sending..." data-ok-message="Message Sent"><i class="icon-location-arrow"></i>Send Message</button></p>
+						<p><button id="submit" name="submit" type="submit" class="btn btn-theme btn-lg" data-error-message="Error!" data-sending-message="Sending..." data-ok-message="Message Sent"><i class="icon-location-arrow"></i>Send Message</button></p>
 						<input type="hidden" name="submitted" id="submitted" value="true" />
 
 					</form><!-- End contact-form -->
@@ -516,7 +516,28 @@
 		<script src="js/jquery.backstretch.min.js"></script>
 		<script src="js/contact.js"></script>
 		<script src="js/designr.js"></script>
+		<script>
+			$('document').ready(function() {
+				$('#contact-form').submit(function(event) {
+					event.preventDefault();
+					var name = $('#contact-name').val();
+					var email = $('#contact-mail').val();
+					var message = $('#contact-message').val();
 
+					if (name.length === 0 || email.length === 0 || message.length === 0) {
+						return false;
+					} else {
+						var notification = name + " Has Submitted Your Contact Form on http://jhliberty.com/ with the following message: " + message + " - You can respond to their query via " + email;
+						var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance 
+						xmlhttp.open("POST", "https://hooks.slack.com/services/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");
+						xmlhttp.send(JSON.stringify({text: notification}));
+						$('#contact-name').val('');
+						$('#contact-mail').val('');
+						$('#contact-message').val('');
+					}
+				});
+			});
+		</script>
 	</body>
 
 </html>
